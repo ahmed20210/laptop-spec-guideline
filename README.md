@@ -1,0 +1,1 @@
+# laptop-spec-guideline

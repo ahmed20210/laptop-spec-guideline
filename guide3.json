@@ -1,0 +1,30 @@
+{
+  "laptop_spec_guideline_deliverable": {
+    "version": "1.0",
+    "files": {
+      "guide.json": {
+        "language": "en",
+        "content": "Comprehensive JSON reference guide explaining laptop specifications for buyers.",
+        "covers": [
+          "Intel and AMD CPU suffixes",
+          "Integrated versus dedicated graphics",
+          "Nvidia RTX laptop GPU tiers",
+          "CPU cache levels L1, L2, and L3",
+          "RAM capacities, DDR4, DDR5, and LPDDR considerations"
+        ]
+      },
+      "guide2.json": {
+        "language": "ar",
+        "content": "دليل عربي منظم للحد الأدنى والمواصفات الموصى بها حسب نوع الاستخدام.",
+        "covers": [
+          "التصفح والأعمال المكتبية العادية",
+          "البرمجة وتطوير الويب الشامل",
+          "تطوير وبرمجة الذكاء الاصطناعي",
+          "التصميم الجرافيكي وتحرير الفيديو",
+          "الألعاب والتصميم ثلاثي الأبعاد"
+        ]
+      }
+    },
+    "validation_note": "Both guide.json and guide2.json are intended to be valid JSON files. The Arabic guide is stored as structured JSON so it can be reused programmatically while preserving professional Arabic wording."
+  }
+}

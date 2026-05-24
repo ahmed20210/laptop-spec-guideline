@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg-primary: #f3f7ff;
+  --bg-secondary: #ecfdf8;
+  --surface: #ffffffe0;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --line-soft: #dbe7f2;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg-primary: #040916;
+  --bg-secondary: #0b1424;
+  --surface: #0f172ae6;
+  --text-main: #edf3ff;
+  --text-muted: #a7b4c8;
+  --line-soft: #2a3a56;
+}
+
+body {
+  @apply min-h-screen text-[var(--text-main)];
+  background:
+    radial-gradient(circle at 10% 10%, rgba(20, 184, 166, 0.2), transparent 42%),
+    radial-gradient(circle at 90% 5%, rgba(14, 116, 144, 0.14), transparent 38%),
+    linear-gradient(135deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 35%, #ffffff 65%) 42%, var(--bg-secondary) 100%);
+}
+
+main {
+  @apply relative mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10;
+}
+
+.grid-cards {
+  @apply grid gap-5 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+.section-shell {
+  @apply rounded-3xl border border-white/70 bg-white/70 p-4 shadow-soft backdrop-blur-md sm:p-6 dark:border-slate-700/80 dark:bg-slate-900/60;
+}
+
+.field-control {
+  @apply w-full rounded-xl border border-slate-300/90 bg-white px-3 py-2.5 text-slate-800 shadow-sm transition outline-none dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100;
+}
+
+.field-control:focus {
+  @apply border-ocean ring-2 ring-ocean/20;
+}
+
+.headline-gradient {
+  @apply bg-gradient-to-r from-cyan-700 via-ocean to-emerald-600 bg-clip-text text-transparent dark:from-cyan-300 dark:via-cyan-200 dark:to-emerald-200;
+}
