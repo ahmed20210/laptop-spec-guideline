@@ -1,30 +1,46 @@
 "use client";
 
+import { useMemo } from "react";
 import { ComparisonConfig } from "@/types/domain";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useComparison } from "@/hooks/useComparison";
+import { compareSpecRow } from "@/lib/spec-ranking";
 
 interface ComparisonToolProps {
   options: ComparisonConfig[];
 }
 
-export function ComparisonTool({ options }: ComparisonToolProps): JSX.Element {
-  const { selected, first, second, third, setFirst, setSecond, setThird } = useComparison(options);
+const ROWS = [
+  { key: "cpu", label: "CPU | المعالج" },
+  { key: "ram", label: "RAM | الذاكرة" },
+  { key: "gpu", label: "GPU | كرت الشاشة" },
+  { key: "storage", label: "Storage | التخزين" },
+] as const;
 
-  const rows = [
-    { key: "cpu", label: "CPU | المعالج" },
-    { key: "ram", label: "RAM | الذاكرة" },
-    { key: "gpu", label: "GPU | كرت الشاشة" },
-    { key: "storage", label: "Storage | التخزين" }
-  ] as const;
+export function ComparisonTool({ options }: ComparisonToolProps): JSX.Element {
+  const { selected, first, second, third, setFirst, setSecond, setThird } =
+    useComparison(options);
+
+  // Pre-compute row comparisons so rendering is clean
+  const rowComparisons = useMemo(
+    () =>
+      ROWS.map((row) => ({
+        key: row.key,
+        label: row.label,
+        comparison: compareSpecRow(row.key, selected),
+      })),
+    [selected]
+  );
 
   return (
     <div className="space-y-6">
       <div className="section-shell grid gap-3 sm:grid-cols-3">
         {[first, second, third].map((value, index) => (
           <label key={index} className="space-y-2">
-            <span className="text-sm font-semibold">Configuration {index + 1} | التكوين {index + 1}</span>
+            <span className="text-sm font-semibold">
+              Configuration {index + 1} | التكوين {index + 1}
+            </span>
             <select
               value={value}
               onChange={(event) => {
@@ -44,35 +60,81 @@ export function ComparisonTool({ options }: ComparisonToolProps): JSX.Element {
       </div>
 
       <Card className="border-cyan-100/80 bg-white/90 dark:border-cyan-900/40 dark:bg-slate-900/75">
-        <CardTitle>Side-by-Side Difference Table | جدول الفروقات</CardTitle>
+        <CardTitle>
+          Side-by-Side Difference Table | جدول الفروقات
+        </CardTitle>
         <div className="mt-4 overflow-x-auto">
           <table className="min-w-full border-collapse text-sm">
             <thead>
               <tr>
-                <th className="border-b border-slate-200 bg-slate-50 p-2 text-left dark:border-slate-700 dark:bg-slate-800">Spec | المواصفة</th>
+                <th className="border-b border-slate-200 bg-slate-50 p-2 text-left dark:border-slate-700 dark:bg-slate-800">
+                  Spec | المواصفة
+                </th>
                 {selected.map((item) => (
-                  <th key={item.id} className="border-b border-slate-200 bg-slate-50 p-2 text-left dark:border-slate-700 dark:bg-slate-800">
+                  <th
+                    key={item.id}
+                    className="border-b border-slate-200 bg-slate-50 p-2 text-left dark:border-slate-700 dark:bg-slate-800"
+                  >
                     <div className="flex items-center gap-2">
                       {item.label}
-                      <Badge tone={item.category === "recommended" ? "accent" : "neutral"}>{item.category}</Badge>
+                      <Badge
+                        tone={
+                          item.category === "recommended" ? "accent" : "neutral"
+                        }
+                      >
+                        {item.category}
+                      </Badge>
                     </div>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
-                <tr key={row.key}>
-                  <td className="border-b border-slate-100 bg-slate-50/60 p-2 font-semibold dark:border-slate-700 dark:bg-slate-800/70">
-                    {row.label}
-                  </td>
-                  {selected.map((item) => (
-                    <td key={`${item.id}-${row.key}`} className="border-b border-slate-100 p-2 text-slate-700 dark:border-slate-700 dark:text-slate-300">
-                      {item.profile[row.key]}
+              {rowComparisons.map((row) => {
+                const isIdentical = row.comparison.allIdentical;
+                const bestIdx = row.comparison.bestIndex;
+
+                return (
+                  <tr
+                    key={row.key}
+                    className={
+                      isIdentical
+                        ? "opacity-50 text-slate-400 dark:text-slate-500"
+                        : "bg-amber-50/40 dark:bg-amber-900/10"
+                    }
+                    aria-label={
+                      isIdentical
+                        ? `${row.label} – all identical`
+                        : `${row.label} – differences detected`
+                    }
+                  >
+                    <td className="border-b border-slate-100 bg-slate-50/60 p-2 font-semibold dark:border-slate-700 dark:bg-slate-800/70">
+                      {row.label}
                     </td>
-                  ))}
-                </tr>
-              ))}
+                    {selected.map((item, idx) => {
+                      const isBest = idx === bestIdx;
+                      return (
+                        <td
+                          key={`${item.id}-${row.key}`}
+                          className="border-b border-slate-100 p-2 text-slate-700 dark:border-slate-700 dark:text-slate-300"
+                        >
+                          <span className="inline-flex items-center gap-1.5">
+                            {item.profile[row.key]}
+                            {isBest && (
+                              <Badge tone="accent">
+                                <span aria-hidden="true" className="mr-0.5">
+                                  🏆
+                                </span>
+                                Best
+                              </Badge>
+                            )}
+                          </span>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
