@@ -29,6 +29,9 @@ const config: Config = {
 
       animation: {
         rise: "rise 500ms ease-out both",
+        float: "float 6s ease-in-out infinite",
+        "slide-up": "slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "fade-in": "fade-in 0.4s ease-out forwards",
       },
     },
   },

@@ -23,5 +23,5 @@ export function CardTitle({ children, className }: CardProps): JSX.Element {
 }
 
 export function CardDescription({ children, className }: CardProps): JSX.Element {
-  return <p className={cn("mt-2 text-sm leading-6 text-[var(--text-muted)]", className)}>{children}</p>;
+  return <p className={cn("mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300", className)}>{children}</p>;
 }

@@ -1,27 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { ComparisonConfig } from "@/types/domain";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useComparison } from "@/hooks/useComparison";
 
 interface ComparisonToolProps {
   options: ComparisonConfig[];
 }
 
-function findOption(options: ComparisonConfig[], id: string): ComparisonConfig | undefined {
-  return options.find((item) => item.id === id);
-}
-
 export function ComparisonTool({ options }: ComparisonToolProps): JSX.Element {
-  const [first, setFirst] = useState(options[0]?.id ?? "");
-  const [second, setSecond] = useState(options[1]?.id ?? "");
-  const [third, setThird] = useState(options[2]?.id ?? "");
-
-  const selected = useMemo(
-    () => [first, second, third].map((id) => findOption(options, id)).filter(Boolean) as ComparisonConfig[],
-    [first, second, third, options]
-  );
+  const { selected, first, second, third, setFirst, setSecond, setThird } = useComparison(options);
 
   const rows = [
     { key: "cpu", label: "CPU | المعالج" },

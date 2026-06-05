@@ -4,30 +4,30 @@
 
 :root {
   color-scheme: light;
-  --bg-primary: #f3f7ff;
-  --bg-secondary: #ecfdf8;
-  --surface: #ffffffe0;
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --surface: #ffffff;
   --text-main: #0f172a;
   --text-muted: #475569;
-  --line-soft: #dbe7f2;
+  --line-soft: #e2e8f0;
 }
 
 .dark {
   color-scheme: dark;
-  --bg-primary: #040916;
-  --bg-secondary: #0b1424;
-  --surface: #0f172ae6;
-  --text-main: #edf3ff;
-  --text-muted: #a7b4c8;
-  --line-soft: #2a3a56;
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --surface: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --line-soft: #334155;
 }
 
 body {
   @apply min-h-screen text-[var(--text-main)];
   background:
-    radial-gradient(circle at 10% 10%, rgba(20, 184, 166, 0.2), transparent 42%),
-    radial-gradient(circle at 90% 5%, rgba(14, 116, 144, 0.14), transparent 38%),
-    linear-gradient(135deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 35%, #ffffff 65%) 42%, var(--bg-secondary) 100%);
+    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15), transparent 45%),
+    radial-gradient(circle at 85% 10%, rgba(139, 92, 246, 0.12), transparent 40%),
+    linear-gradient(160deg, var(--bg-primary) 0%, color-mix(in srgb, var(--bg-primary) 40%, #ffffff 60%) 50%, var(--bg-secondary) 100%);
 }
 
 main {
@@ -51,5 +51,40 @@ main {
 }
 
 .headline-gradient {
-  @apply bg-gradient-to-r from-cyan-700 via-ocean to-emerald-600 bg-clip-text text-transparent dark:from-cyan-300 dark:via-cyan-200 dark:to-emerald-200;
+  @apply bg-gradient-to-r from-indigo-600 via-ocean to-violet-600 bg-clip-text text-transparent dark:from-indigo-400 dark:via-violet-400 dark:to-pink-400;
+}
+
+/* New Animations & Utilities */
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  .animate-float-delayed {
+    animation: float 6s ease-in-out 2s infinite;
+  }
+  .animate-slide-up {
+    animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out forwards;
+  }
+  .glass-panel {
+    @apply backdrop-blur-xl bg-white/85 dark:bg-slate-900/80 border border-white/40 dark:border-slate-700/50 shadow-lg;
+  }
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

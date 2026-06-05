@@ -62,7 +62,7 @@ export function UseCaseGrid({ useCases }: UseCaseGridProps): JSX.Element {
               <CardTitle>{useCase.nameEn}</CardTitle>
               <Badge tone="accent">{useCase.budgetTier}</Badge>
             </div>
-            <CardDescription>{useCase.description}</CardDescription>
+            <CardDescription className="text-slate-700 dark:text-gray-00">{useCase.description}</CardDescription>
 
             <div className="mt-4 space-y-2 rounded-xl border border-slate-200/80 bg-slate-50/80 p-3 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
               <h4 className="font-semibold text-ink">Minimum | الحد الأدنى</h4>

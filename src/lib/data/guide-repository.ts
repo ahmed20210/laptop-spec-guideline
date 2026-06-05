@@ -174,3 +174,49 @@ export function getComparisonConfigs(): ComparisonConfig[] {
     }
   ]);
 }
+
+export interface GuideCategory {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  description: string;
+  compatibleTasks: string[];
+  priorities: string[];
+  avoid: string[];
+  minimum: SpecProfile;
+  recommended: SpecProfile;
+}
+
+export function getGuideCategories(): string[] {
+  const useCases = arRoot["حالات_الاستخدام"] as Record<string, Record<string, unknown>>;
+  return Object.keys(useCases).map((rawKey) => {
+    const nameEn = useCaseNameMap[rawKey] ?? rawKey;
+    return kebabCase(nameEn);
+  });
+}
+
+export function getCategoryGuide(slug: string): GuideCategory | undefined {
+  const useCases = arRoot["حالات_الاستخدام"] as Record<string, Record<string, unknown>>;
+  for (const [rawKey, data] of Object.entries(useCases)) {
+    const nameEn = useCaseNameMap[rawKey] ?? rawKey;
+    if (kebabCase(nameEn) === slug) {
+      const min = toSpecProfile(data["الحد_الأدنى"] as Record<string, unknown>);
+      const rec = toSpecProfile(data["الموصى_به"] as Record<string, unknown>);
+      const compatibleTasks = Array.isArray(data["يناسب"]) ? (data["يناسب"] as string[]) : [];
+      const priorities = Array.isArray(data["الأولوية"]) ? (data["الأولوية"] as string[]) : [];
+      const avoid = Array.isArray(data["تجنب"]) ? (data["تجنب"] as string[]) : [];
+      return {
+        id: slug,
+        nameAr: rawKey.replaceAll("_", " "),
+        nameEn,
+        description: String(data["الوصف"] ?? compatibleTasks.join("، ") ?? ""),
+        compatibleTasks,
+        priorities,
+        avoid,
+        minimum: min,
+        recommended: rec,
+      };
+    }
+  }
+  return undefined;
+}
